@@ -15,7 +15,7 @@ import (
 	"runtime"
 	"time"
 
-	"github.com/cznic/mathutil"
+	"modernc.org/mathutil"
 )
 
 const (

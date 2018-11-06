@@ -69,7 +69,7 @@
 //
 // 	func Uint64ToBigInt(n uint64) *big.Int
 // 	func Uint64FromBigInt(n *big.Int) (uint64, bool)
-package mathutil
+package mathutil // import "modernc.org/mathutil"
 
 import (
 	"math"

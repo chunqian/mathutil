@@ -19,8 +19,8 @@ import (
 	"sort"
 	"time"
 
-	"github.com/cznic/mathutil"
-	"github.com/cznic/sortutil"
+	"modernc.org/mathutil"
+	"modernc.org/sortutil"
 )
 
 func main() {

@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-package mersenne
+package mersenne // import "modernc.org/mathutil/mersenne"
 
 import (
 	"math"
@@ -12,7 +12,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/cznic/mathutil"
+	"modernc.org/mathutil"
 )
 
 func r32() *mathutil.FC32 {

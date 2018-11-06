@@ -18,13 +18,13 @@ Links
 Referenced from above:
  [1] http://en.wikipedia.org/wiki/Mersenne_number
 */
-package mersenne
+package mersenne // import "modernc.org/mathutil/mersenne"
 
 import (
 	"math"
 	"math/big"
 
-	"github.com/cznic/mathutil"
+	"modernc.org/mathutil"
 	"github.com/remyoudompheng/bigfft"
 )
 

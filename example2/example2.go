@@ -10,7 +10,7 @@ package main
 
 import (
 	"bytes"
-	"github.com/cznic/mathutil"
+	"modernc.org/mathutil"
 	"image"
 	"image/png"
 	"io/ioutil"

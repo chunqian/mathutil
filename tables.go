@@ -4,7 +4,7 @@
 
 // "Static" data
 
-package mathutil
+package mathutil // import "modernc.org/mathutil"
 
 var (
 	// Set bits count in a byte

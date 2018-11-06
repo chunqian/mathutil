@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-package mathutil
+package mathutil // import "modernc.org/mathutil"
 
 import (
 	"bytes"
@@ -5505,7 +5505,7 @@ func TestQuadPolyFactors(t *testing.T) {
 	}
 }
 
-// https://github.com/cznic/sqlite/issues/12#issuecomment-310155204
+// https://gitlab.com/cznic/sqlite/issues/12#issuecomment-310155204
 func TestFCPRNG(t *testing.T) {
 	const N = 131072
 	rng, err := NewFC32(1, N, true)

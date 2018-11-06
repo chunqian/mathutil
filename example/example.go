@@ -11,7 +11,7 @@ package main
 import (
 	"bufio"
 	"flag"
-	"github.com/cznic/mathutil"
+	"modernc.org/mathutil"
 	"log"
 	"math"
 	"os"

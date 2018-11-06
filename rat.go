@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-package mathutil
+package mathutil // import "modernc.org/mathutil"
 
 // QCmpUint32 compares a/b and c/d and returns:
 //
