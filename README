@@ -3,8 +3,8 @@ http://git.nic.cz/redmine/projects/gornd/repository
 
 Packages in this repository:
 
-Install: $ go get github.com/cznic/mathutil
-Godocs:  http://godoc.org/github.com/cznic/mathutil
+Install: $ go get modernc.org/mathutil
+Godocs:  http://godoc.org/modernc.org/mathutil
 
-Install: $ go get github.com/cznic/mathutil/mersenne
-Godocs:  http://godoc.org/github.com/cznic/mathutil/mersenne
+Install: $ go get modernc.org/mathutil/mersenne
+Godocs:  http://godoc.org/modernc.org/mathutil/mersenne
