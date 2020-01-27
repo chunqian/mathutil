@@ -11,9 +11,9 @@ import (
 )
 
 var (
-	// The maximun Int128 value.
+	// MaxInt128 represents the maximun Int128 value.
 	MaxInt128 *big.Int
-	// The minimun Int128 value.
+	// MinInt128 represents the minimun Int128 value.
 	MinInt128 *big.Int
 )
 
@@ -127,7 +127,7 @@ func (x *Int128) SetInt64(y int64) (r Int128) {
 	return r
 }
 
-// SetInt64 sets x to y and returns x.
+// SetUint64 sets x to y and returns x.
 func (x *Int128) SetUint64(y uint64) (r Int128) {
 	r = Int128{Lo: int64(y)}
 	*x = r

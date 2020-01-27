@@ -9,7 +9,7 @@
 //
 // 2018-10-21 Added BinaryLog
 //
-// 2018-04-25: New functions for determinig Max/Min of nullable values. Ex:
+// 2018-04-25: New functions for determining Max/Min of nullable values. Ex:
 //  func MaxPtr(a, b *int) *int {
 //  func MinPtr(a, b *int) *int {
 //  func MaxBytePtr(a, b *byte) *byte {
@@ -86,9 +86,8 @@ const (
 )
 
 var (
-	_m1 = big.NewInt(-1)
-	_1  = big.NewInt(1)
-	_2  = big.NewInt(2)
+	_1 = big.NewInt(1)
+	_2 = big.NewInt(2)
 )
 
 // GCDByte returns the greatest common divisor of a and b. Based on:
@@ -1415,4 +1414,16 @@ func ToBase(n *big.Int, b int) []int {
 		r = append(r, k*int(rem.Int64()))
 	}
 	return r
+}
+
+// CheckAddInt64 returns the a+b and an indicator that the result is greater
+// than math.MaxInt64.
+func CheckAddInt64(a, b int64) (sum int64, gt bool) {
+	return a + b, a > 0 && b > math.MaxInt64-a || a < 0 && b < math.MinInt64-a
+}
+
+// CheckSubInt64 returns a-b and an indicator that the result is less than than
+// math.MinInt64.
+func CheckSubInt64(a, b int64) (sum int64, lt bool) {
+	return a - b, a > 0 && a-math.MaxInt64 > b || a < 0 && a-math.MinInt64 < b
 }

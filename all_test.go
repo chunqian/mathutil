@@ -47,7 +47,7 @@ func TODO(...interface{}) string {
 func use(...interface{}) {}
 
 func init() {
-	use(caller, TODO)
+	use(caller, TODO, dbg)
 }
 
 func intPtr(a int) *int {
@@ -102,11 +102,12 @@ func r32() *FC32 {
 }
 
 var (
-	r64lo          = big.NewInt(math.MinInt64)
-	r64hi          = big.NewInt(math.MaxInt64)
-	MinIntM1       = MinInt
 	MaxIntP1       = MaxInt
 	MaxUintP1 uint = MaxUint
+	MinIntM1       = MinInt
+	_m1            = big.NewInt(-1)
+	r64hi          = big.NewInt(math.MaxInt64)
+	r64lo          = big.NewInt(math.MinInt64)
 )
 
 func init() {
@@ -832,7 +833,7 @@ func TestFactorInt(t *testing.T) {
 
 		x := uint64(1)
 		for _, v := range f {
-			if p := v.Prime; p < 0 || !IsPrime(v.Prime) {
+			if !IsPrime(v.Prime) {
 				return false
 			}
 
@@ -5548,4 +5549,163 @@ func TestFCPRNG(t *testing.T) {
 	}
 
 	t.Log(mods)
+}
+
+func TestCheckAddInt64(t *testing.T) {
+	for i, test := range []struct {
+		a, b int64
+		gt   bool
+	}{
+		{math.MinInt64, -2, true},
+		{math.MinInt64, -1, true},
+		{math.MinInt64, 0, false},
+		{math.MinInt64, 1, false},
+
+		{math.MinInt64 + 1, -3, true},
+		{math.MinInt64 + 1, -2, true},
+		{math.MinInt64 + 1, -1, false},
+		{math.MinInt64 + 1, 0, false},
+
+		{math.MinInt64 + 2, -4, true},
+		{math.MinInt64 + 2, -3, true},
+		{math.MinInt64 + 2, -2, false},
+		{math.MinInt64 + 2, -1, false},
+
+		{-2, math.MinInt64 + 3, false},
+		{-2, math.MinInt64 + 2, false},
+		{-2, math.MinInt64 + 1, true},
+		{-2, math.MinInt64, true},
+
+		{-1, math.MinInt64 + 2, false},
+		{-1, math.MinInt64 + 1, false},
+		{-1, math.MinInt64, true},
+
+		{0, math.MinInt64 + 2, false},
+		{0, math.MinInt64 + 1, false},
+		{0, math.MinInt64, false},
+
+		{1, math.MaxInt64 - 2, false},
+		{1, math.MaxInt64 - 1, false},
+		{1, math.MaxInt64, true},
+
+		{-2, math.MinInt64, true},
+		{-1, math.MinInt64, true},
+		{0, math.MinInt64, false},
+		{1, math.MinInt64, false},
+
+		{-2, math.MaxInt64, false},
+		{-1, math.MaxInt64, false},
+		{0, math.MaxInt64, false},
+		{1, math.MaxInt64, true},
+		{2, math.MaxInt64, true},
+
+		{math.MaxInt64 - 2, 1, false},
+		{math.MaxInt64 - 2, 2, false},
+		{math.MaxInt64 - 2, 3, true},
+		{math.MaxInt64 - 2, 4, true},
+
+		{math.MaxInt64 - 1, 0, false},
+		{math.MaxInt64 - 1, 1, false},
+		{math.MaxInt64 - 1, 2, true},
+		{math.MaxInt64 - 1, 3, true},
+
+		{math.MaxInt64, -1, false},
+		{math.MaxInt64, 0, false},
+		{math.MaxInt64, 1, true},
+		{math.MaxInt64, 2, true},
+	} {
+		a := test.a
+		b := test.b
+		c, gt := CheckAddInt64(a, b)
+		if g, e := gt, test.gt; g != e {
+			switch {
+			case test.gt:
+				t.Errorf("%d: missing gt: %v+%v: %v", i, a, b, c)
+			default:
+				t.Errorf("%d: unexpected gt: %v+%v: %v", i, a, b, c)
+			}
+		}
+
+		if g, e := test.a+test.b, c; g != e {
+			t.Error(i, a, b, c)
+		}
+
+		c, gt = CheckAddInt64(b, a)
+		if g, e := gt, test.gt; g != e {
+			switch {
+			case test.gt:
+				t.Errorf("%d: missing gt: %v+%v: %v", i, b, a, c)
+			default:
+				t.Errorf("%d: unexpected gt: %v+%v: %v", i, b, a, c)
+			}
+		}
+
+		if g, e := test.b+test.a, c; g != e {
+			t.Error(i, b, a, c)
+		}
+	}
+}
+
+func TestCheckSubInt64(t *testing.T) {
+	for i, test := range []struct {
+		a, b int64
+		lt   bool
+	}{
+		{math.MinInt64, -1, false},
+		{math.MinInt64, 0, false},
+		{math.MinInt64, 1, true},
+		{math.MinInt64, 2, true},
+
+		{math.MinInt64 + 1, 0, false},
+		{math.MinInt64 + 1, 1, false},
+		{math.MinInt64 + 1, 2, true},
+		{math.MinInt64 + 1, 3, true},
+
+		{-1, math.MinInt64, false},
+		{-1, math.MinInt64 + 1, false},
+		{-1, math.MinInt64 + 2, false},
+
+		{-1, math.MaxInt64, false},
+		{-1, math.MaxInt64 - 1, false},
+		{-1, math.MaxInt64 - 2, false},
+
+		{0, math.MinInt64, false},
+		{0, math.MinInt64 + 1, false},
+		{0, math.MinInt64 + 2, false},
+
+		{0, math.MaxInt64, false},
+		{0, math.MaxInt64 - 1, false},
+		{0, math.MaxInt64 - 2, false},
+
+		{1, math.MinInt64, true},
+		{1, math.MinInt64 + 1, true},
+		{1, math.MinInt64 + 2, false},
+		{1, math.MinInt64 + 3, false},
+
+		{math.MaxInt64 - 1, 0, false},
+		{math.MaxInt64 - 1, -1, false},
+		{math.MaxInt64 - 1, -2, true},
+		{math.MaxInt64 - 1, -3, true},
+
+		{math.MaxInt64, 1, false},
+		{math.MaxInt64, 0, false},
+		{math.MaxInt64, -1, true},
+		{math.MaxInt64, -2, true},
+	} {
+		a := test.a
+		b := test.b
+		c, lt := CheckSubInt64(a, b)
+		if g, e := lt, test.lt; g != e {
+			switch {
+			case test.lt:
+				t.Errorf("%d: missing lt: %v-%v: %v", i, a, b, c)
+			default:
+				t.Errorf("%d: unexpected lt: %v-%v: %v", i, a, b, c)
+			}
+		}
+
+		if g, e := test.a-test.b, c; g != e {
+			t.Error(i, a, b, c)
+		}
+	}
 }
